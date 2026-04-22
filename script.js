@@ -224,45 +224,49 @@ async function loadEvents() {
     const loading = document.getElementById('events-loading');
     const empty   = document.getElementById('events-empty');
 
-    const MONTHS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
-    const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
     try {
-        const res = await fetch(`${API_URL}/events`);
-        const events = await res.json();
+        const res  = await fetch(`${API_URL}/events`);
+        const data = await res.json();
 
         loading.style.display = 'none';
 
-        if (!events.length) {
+        const today = new Date(); today.setHours(0,0,0,0);
+        const upcoming = Array.isArray(data)
+            ? data.filter(e => e.published && new Date(e.date) >= today)
+                  .sort((a,b) => new Date(a.date) - new Date(b.date))
+            : [];
+
+        if (!upcoming.length) {
             empty.style.display = 'block';
             return;
         }
 
         grid.style.display = 'flex';
-        grid.innerHTML = events.map(e => {
+        grid.innerHTML = upcoming.map(e => {
             const date = new Date(e.date);
-            const d = date.getDate().toString().padStart(2,'0');
+            const day  = date.getDate().toString().padStart(2,'0');
             const monthIdx = date.getMonth();
-            const y = date.getFullYear();
+            const year = date.getFullYear();
             const monthLabel = currentLang === 'fr' ? MONTHS_FR[monthIdx] : MONTHS_EN[monthIdx];
 
+            const typeLabel = e.category || e.type || '';
             let badgeClass = '';
-            let badgeLabel = e.category || '';
+            let badgeLabel = typeLabel;
             if (e.status === 'free')     { badgeClass = 'free';     badgeLabel = currentLang === 'fr' ? 'Entrée libre' : 'Free entry'; }
-            if (e.status === 'sold-out') { badgeClass = 'sold-out'; badgeLabel = currentLang === 'fr' ? 'Complet'      : 'Sold out'; }
+            if (e.status === 'sold-out') { badgeClass = 'sold-out'; badgeLabel = currentLang === 'fr' ? 'Complet' : 'Sold out'; }
 
             return `
             <div class="event-card">
                 <div class="event-date">
-                    <span class="day">${d}</span>
+                    <span class="day">${day}</span>
                     <span class="month">${monthLabel}</span>
-                    <span class="year">${y}</span>
+                    <span class="year">${year}</span>
                 </div>
                 <div class="event-details">
                     <h3>${e.title}</h3>
                     <div class="event-meta">
                         ${e.location ? `<span><i class="fas fa-map-marker-alt"></i> ${e.location}</span>` : ''}
-                        ${e.category ? `<span><i class="fas fa-tag"></i> ${e.category}</span>` : ''}
+                        ${typeLabel ? `<span><i class="fas fa-tag"></i> ${typeLabel}</span>` : ''}
                     </div>
                 </div>
                 ${badgeLabel ? `<span class="event-badge ${badgeClass}">${badgeLabel}</span>` : ''}
@@ -272,7 +276,7 @@ async function loadEvents() {
     } catch (err) {
         loading.style.display = 'none';
         empty.style.display = 'block';
-        console.warn('Impossible de charger les événements :', err);
+        console.warn('Erreur chargement événements:', err);
     }
 }
 
