@@ -662,7 +662,7 @@ header.scrolled {
 .lightbox-nav.prev { left: 20px; }
 .lightbox-nav.next { right: 20px; }
 
-/* Responsive */
+/* Responsive Gallery */
 @media (max-width: 768px) {
     .gallery-thumbs {
         grid-template-columns: repeat(4, 1fr);
@@ -960,6 +960,184 @@ header.scrolled {
     .event-date .day { font-size: 1.4rem; }
 }
 
+/* ===== TESTIMONIALS SECTION ===== */
+.testimonials {
+    background-color: var(--light);
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonials::before {
+    content: '\201C';
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    font-size: 20rem;
+    color: var(--secondary);
+    opacity: 0.05;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.testimonials-loading,
+.testimonials-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+}
+
+.testimonials-loading i,
+.testimonials-empty i {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    margin-bottom: 12px;
+    display: block;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+.testimonial-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+    border-bottom: 3px solid var(--secondary);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+
+.testimonial-quote {
+    color: var(--secondary);
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+    opacity: 0.6;
+}
+
+.testimonial-message {
+    color: var(--text);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.testimonial-author strong {
+    display: block;
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+.testimonial-role {
+    display: block;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+/* Formulaire témoignage */
+.testimonial-form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.testimonial-form-wrapper h3 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.testimonial-form-wrapper > p {
+    color: var(--text-light);
+    margin-bottom: 28px;
+}
+
+.testimonial-form-wrapper .form-group {
+    text-align: left;
+}
+
+.testimonial-submit-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.testimonial-note {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin: 0;
+}
+
+.testimonial-success {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.testimonial-success i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.testimonial-success h4 {
+    color: var(--dark);
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.testimonial-success p {
+    color: var(--text-light);
+}
+
+/* Responsive Testimonials */
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    .testimonial-form-wrapper {
+        padding: 24px 18px;
+    }
+}
+
 /* Accounts Section */
 .accounts {
     background-color: var(--white);
@@ -1245,7 +1423,7 @@ footer {
         height: 40px;
         font-size: 1rem;
     }
-    
+}
 
 @media (max-width: 576px) {
     .hero h1 {
@@ -1258,4 +1436,101 @@ footer {
         width: 80%;
     }
 }
+
+
+/* ===== DROPDOWN "PLUS" ===== */
+.nav-dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--dark);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    transition: var(--transition);
+}
+
+.dropdown-toggle:hover {
+    color: var(--primary);
+}
+
+.dropdown-arrow {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 14px);
+    right: 0;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    list-style: none;
+    min-width: 180px;
+    padding: 8px 0;
+    z-index: 1001;
+    border-top: 3px solid var(--secondary);
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-dropdown.open .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.dropdown-menu li a:hover {
+    color: var(--primary);
+    background-color: var(--light);
+    padding-left: 26px;
+}
+
+/* Dropdown en mobile */
+@media (max-width: 768px) {
+    .dropdown-toggle {
+        font-size: 1rem;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border-top: none;
+        border-left: 3px solid var(--secondary);
+        border-radius: 0 0 8px 8px;
+        padding: 0;
+        margin-top: 8px;
+        animation: none;
+    }
+
+    .dropdown-menu li a {
+        padding: 10px 24px;
+    }
 }

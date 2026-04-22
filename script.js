@@ -171,18 +171,36 @@ langEnBtn.addEventListener('click', () => switchLanguage('en'));
 langFrBtn.addEventListener('click', () => switchLanguage('fr'));
 
 // ── Form submission ───────────────────────────────────────────
-bookingForm.addEventListener('submit', (e) => {
+bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const eventType = document.getElementById('event-type').value;
-    alert(currentLang === 'en'
-        ? `Thank you ${name}! Your booking request for a ${eventType} has been received. We'll contact you at ${email} shortly.`
-        : `Merci ${name}! Votre demande de réservation pour un ${eventType} a été reçue. Nous vous contacterons à ${email} sous peu.`);
-    bookingForm.reset();
-    document.getElementById('message').placeholder = currentLang === 'en'
-        ? 'Tell us about your event and how Thenella can minister...'
-        : 'Parlez-nous de votre événement et comment Thenella peut exercer son ministère...';
+    const btn = bookingForm.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'en' ? 'Sending...' : 'Envoi...';
+
+    try {
+        const res = await fetch('http://localhost:5000/api/booking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                eventType: document.getElementById('event-type').value,
+                message: document.getElementById('message').value
+            })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        alert(currentLang === 'en'
+            ? `Thank you! Your request has been sent. Check your email.`
+            : `Merci ! Votre demande a été envoyée. Vérifiez votre email.`);
+        bookingForm.reset();
+    } catch {
+        alert(currentLang === 'en' ? 'Error sending. Try again.' : 'Erreur envoi. Réessayez.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = currentLang === 'en' ? 'Send Booking Request' : 'Envoyer la Demande de Réservation';
+    }
 });
 
 // ── Smooth scrolling ──────────────────────────────────────────
@@ -198,74 +216,40 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ── Events from Google Sheets ─────────────────────────────────
-// 👉 Remplace cette URL par l'URL de publication de ton Google Sheets
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTzQ1m0AYELDkNDGTfCG1t6OInZikRU9jLccauP6NPKXlQEyrKSfSHyZReckp9--mPZRFDkvo64WVPw/pub?output=csv';
-
-const MONTHS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
-const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+// ── Events from API ───────────────────────────────────────────
+const API_URL = 'https://backenddethenellawebdyn-production.up.railway.app/api';
 
 async function loadEvents() {
     const grid    = document.getElementById('events-grid');
     const loading = document.getElementById('events-loading');
     const empty   = document.getElementById('events-empty');
 
+    const MONTHS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+    const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
     try {
-        const res  = await fetch(SHEET_URL);
-        const text = await res.text();
-
-        // Parse CSV : on ignore la première ligne (en-têtes)
-        const lines = text.trim().split('\n').slice(1);
-
-        const today = new Date(); today.setHours(0,0,0,0);
-
-        const events = lines
-            .map(line => {
-                // Gestion des virgules dans les champs entre guillemets
-                const cols = line.match(/(".*?"|[^,]+)(?=,|$)/g) || [];
-                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
-                return {
-                    dateStr : clean[0] || '',
-                    title   : clean[1] || '',
-                    location: clean[2] || '',
-                    city    : clean[3] || '',
-                    type    : clean[4] || '',
-                    status  : (clean[5] || '').toLowerCase()
-                };
-            })
-            .filter(e => {
-                if (!e.dateStr || !e.title) return false;
-                const [d, m, y] = e.dateStr.split('/');
-                if (!d || !m || !y) return false;
-                const date = new Date(y, m - 1, d);
-                return date >= today;
-            })
-            .sort((a, b) => {
-                const toDate = s => {
-                    const [d, m, y] = s.split('/');
-                    return new Date(y, m - 1, d);
-                };
-                return toDate(a.dateStr) - toDate(b.dateStr);
-            });
+        const res = await fetch(`${API_URL}/events`);
+        const events = await res.json();
 
         loading.style.display = 'none';
 
-        if (events.length === 0) {
+        if (!events.length) {
             empty.style.display = 'block';
             return;
         }
 
         grid.style.display = 'flex';
         grid.innerHTML = events.map(e => {
-            const [d, m, y] = e.dateStr.split('/');
-            const monthIdx   = parseInt(m) - 1;
-            const lang       = currentLang;
-            const monthLabel = lang === 'fr' ? MONTHS_FR[monthIdx] : MONTHS_EN[monthIdx];
+            const date = new Date(e.date);
+            const d = date.getDate().toString().padStart(2,'0');
+            const monthIdx = date.getMonth();
+            const y = date.getFullYear();
+            const monthLabel = currentLang === 'fr' ? MONTHS_FR[monthIdx] : MONTHS_EN[monthIdx];
 
             let badgeClass = '';
-            let badgeLabel = e.type;
-            if (e.status === 'free')     { badgeClass = 'free';     badgeLabel = lang === 'fr' ? 'Entrée libre' : 'Free entry'; }
-            if (e.status === 'sold-out') { badgeClass = 'sold-out'; badgeLabel = lang === 'fr' ? 'Complet'      : 'Sold out';   }
+            let badgeLabel = e.category || '';
+            if (e.status === 'free')     { badgeClass = 'free';     badgeLabel = currentLang === 'fr' ? 'Entrée libre' : 'Free entry'; }
+            if (e.status === 'sold-out') { badgeClass = 'sold-out'; badgeLabel = currentLang === 'fr' ? 'Complet'      : 'Sold out'; }
 
             return `
             <div class="event-card">
@@ -277,8 +261,8 @@ async function loadEvents() {
                 <div class="event-details">
                     <h3>${e.title}</h3>
                     <div class="event-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> ${e.location}${e.city ? ', ' + e.city : ''}</span>
-                        ${e.type ? `<span><i class="fas fa-tag"></i> ${e.type}</span>` : ''}
+                        ${e.location ? `<span><i class="fas fa-map-marker-alt"></i> ${e.location}</span>` : ''}
+                        ${e.category ? `<span><i class="fas fa-tag"></i> ${e.category}</span>` : ''}
                     </div>
                 </div>
                 ${badgeLabel ? `<span class="event-badge ${badgeClass}">${badgeLabel}</span>` : ''}
@@ -292,10 +276,116 @@ async function loadEvents() {
     }
 }
 
+// ── Testimonials ──────────────────────────────────────────────
+async function loadTestimonials() {
+    const grid    = document.getElementById('testimonials-grid');
+    const loading = document.getElementById('testimonials-loading');
+    const empty   = document.getElementById('testimonials-empty');
+
+    try {
+        const res  = await fetch(`${API_URL}/testimonials`);
+        const data = await res.json();
+
+        loading.style.display = 'none';
+
+        if (!data.length) {
+            empty.style.display = 'block';
+            return;
+        }
+
+        grid.style.display = 'grid';
+        grid.innerHTML = data.map(t => `
+            <div class="testimonial-card">
+                <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                <p class="testimonial-message">${t.message}</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">${t.name.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <strong>${t.name}</strong>
+                        ${t.role ? `<span class="testimonial-role">${t.role}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        loading.style.display = 'none';
+        empty.style.display = 'block';
+        console.warn('Erreur chargement témoignages:', err);
+    }
+}
+
+// Soumission du formulaire témoignage
+const testimonialForm = document.getElementById('testimonial-form');
+if (testimonialForm) {
+    testimonialForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('tm-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        try {
+            const res = await fetch(`${API_URL}/testimonials`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name   : document.getElementById('tm-public-name').value,
+                    role   : document.getElementById('tm-public-role').value,
+                    message: document.getElementById('tm-public-message').value
+                })
+            });
+
+            if (res.ok) {
+                testimonialForm.style.display = 'none';
+                document.getElementById('testimonial-success').style.display = 'block';
+            } else {
+                throw new Error('Erreur serveur');
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Submit Testimony</span>';
+            alert('Erreur lors de la soumission. Réessayez.');
+        }
+    });
+}
+
+// ── Dropdown "Plus" ───────────────────────────────────────────
+const navDropdown = document.getElementById('nav-dropdown');
+const dropdownToggle = document.getElementById('dropdown-toggle');
+const dropdownMenu = document.getElementById('dropdown-menu');
+
+if (dropdownToggle) {
+    dropdownToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navDropdown.classList.toggle('open');
+        dropdownToggle.setAttribute('aria-expanded', isOpen);
+    });
+}
+
+// Fermer en cliquant ailleurs
+document.addEventListener('click', (e) => {
+    if (navDropdown && !navDropdown.contains(e.target)) {
+        navDropdown.classList.remove('open');
+        if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', false);
+    }
+});
+
+// Fermer quand on clique sur un lien du dropdown
+if (dropdownMenu) {
+    dropdownMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navDropdown.classList.remove('open');
+            navLinks.classList.remove('active');
+            hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+    });
+}
+
 // ── Init ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     switchLanguage('en');
     updateGallery(0);
     startAutoSlide();
     loadEvents();
+    loadTestimonials(); // ← ajouté pour charger les témoignages
 });

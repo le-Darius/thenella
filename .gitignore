@@ -1,0 +1,15 @@
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# Optional: Si tu ne veux pas push tes images de test/temp (facultatif)
+# *.webp

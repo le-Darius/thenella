@@ -21,22 +21,33 @@
                     <i class="fas fa-bars"></i>
                 </div>
                 
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#home" data-lang-en="Home" data-lang-fr="Accueil">Home</a></li>
-                    <li><a href="#biography" data-lang-en="Biography" data-lang-fr="Biographie">Biography</a></li>
-                    <li><a href="#achievements" data-lang-en="Achievements" data-lang-fr="Réalisations">Achievements</a></li>
-                    <li><a href="#music" data-lang-en="Music" data-lang-fr="Musique">Music</a></li>
-                    <li><a href="#media" data-lang-en="Gallery" data-lang-fr="Galerie">Gallery</a></li>
-                    <li><a href="#events" data-lang-en="Events" data-lang-fr="Événements">Events</a></li>
-                    <li><a href="#accounts" data-lang-en="Accounts" data-lang-fr="Comptes">Accounts</a></li>
-                    <li><a href="#press" data-lang-en="Press Kit" data-lang-fr="Kit Presse">Press Kit</a></li>
-                    <li><a href="#contact" data-lang-en="Contact" data-lang-fr="Contact">Contact</a></li>
-                    
-                    <div class="language-switcher">
-                        <button class="lang-btn active" id="lang-en">EN</button>
-                        <button class="lang-btn" id="lang-fr">FR</button>
-                    </div>
-                </ul>
+               <ul class="nav-links" id="nav-links">
+    <li><a href="#home" data-lang-en="Home" data-lang-fr="Accueil">Home</a></li>
+    <li><a href="#biography" data-lang-en="Biography" data-lang-fr="Biographie">Biography</a></li>
+    <li><a href="#achievements" data-lang-en="Achievements" data-lang-fr="Réalisations">Achievements</a></li>
+    <li><a href="#music" data-lang-en="Music" data-lang-fr="Musique">Music</a></li>
+    <li><a href="#media" data-lang-en="Gallery" data-lang-fr="Galerie">Gallery</a></li>
+    <li><a href="#accounts" data-lang-en="Accounts" data-lang-fr="Comptes">Accounts</a></li>
+
+    <!-- Menu déroulant "Plus" -->
+    <li class="nav-dropdown" id="nav-dropdown">
+        <button class="dropdown-toggle" id="dropdown-toggle" aria-expanded="false">
+            <span data-lang-en="More" data-lang-fr="Plus">More</span>
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+        </button>
+        <ul class="dropdown-menu" id="dropdown-menu">
+            <li><a href="#events" data-lang-en="Events" data-lang-fr="Événements">Events</a></li>
+            <li><a href="#testimonials" data-lang-en="Testimonials" data-lang-fr="Témoignages">Testimonials</a></li>
+            <li><a href="#press" data-lang-en="Press Kit" data-lang-fr="Kit Presse">Press Kit</a></li>
+            <li><a href="#contact" data-lang-en="Contact" data-lang-fr="Contact">Contact</a></li>
+        </ul>
+    </li>
+
+    <div class="language-switcher">
+        <button class="lang-btn active" id="lang-en">EN</button>
+        <button class="lang-btn" id="lang-fr">FR</button>
+    </div>
+</ul>
             </nav>
         </div>
     </header>
@@ -62,7 +73,7 @@
             
             <div class="bio-content">
                 <div class="bio-img">
-                    <img src="OIP.webp" alt="THENELLA">
+                    <img src="images/OIP.webp" alt="THENELLA">
                 </div>
                 
                 <div class="bio-text">
@@ -135,7 +146,7 @@
             <div class="music-grid">
                 <div class="music-card">
                     <div class="music-img">
-                        <img src="592x592bb.webp" alt="Cœur Nouveau Album">
+                        <img src="images/592x592bb.webp" alt="Cœur Nouveau Album">
                     </div>
                     <div class="music-info">
                         <h3>Cœur Nouveau (2019)</h3>
@@ -146,7 +157,7 @@
                 
                 <div class="music-card">
                     <div class="music-img">
-                        <img src="592x592bb (1).webp" alt="Une Autre Dimension Album">
+                        <img src="images/592x592bb (1).webp" alt="Une Autre Dimension Album">
                     </div>
                     <div class="music-info">
                         <h3>Une Autre Dimension (2024)</h3>
@@ -157,7 +168,7 @@
                 
                 <div class="music-card">
                     <div class="music-img">
-                        <img src="592x592bb (2).webp" alt="Live Single">
+                        <img src="images/592x592bb (2).webp" alt="Live Single">
                     </div>
                     <div class="music-info">
                         <h3>Je te bénirai (Live) (2024)</h3>
@@ -181,28 +192,28 @@
                 <div class="media-slider">
                     <div class="slider-container" id="slider-container">
                         <div class="slide">
-                            <img src="OIP.webp" alt="THENELLA Ministry">
+                            <img src="images/OIP.webp" alt="THENELLA Ministry">
                             <div class="slide-caption">
                                 <div class="slide-count">01 / 04</div>
                                 <h3 data-lang-en="Ministry & Worship" data-lang-fr="Ministère & Adoration">Ministry & Worship</h3>
                             </div>
                         </div>
                         <div class="slide">
-                            <img src="download.webp" alt="Live Performance">
+                            <img src="images/download.webp" alt="Live Performance">
                             <div class="slide-caption">
                                 <div class="slide-count">02 / 04</div>
                                 <h3 data-lang-en="Live Gospel Performances" data-lang-fr="Performances Gospel en Direct">Live Gospel Performances</h3>
                             </div>
                         </div>
                         <div class="slide">
-                            <img src="OIP (5).webp" alt="Music Creation">
+                            <img src="images/OIP (5).webp" alt="Music Creation">
                             <div class="slide-caption">
                                 <div class="slide-count">03 / 04</div>
                                 <h3 data-lang-en="Music Creation Process" data-lang-fr="Processus de Création Musicale">Music Creation Process</h3>
                             </div>
                         </div>
                         <div class="slide">
-                            <img src="OIP (4).webp" alt="Community Outreach">
+                            <img src="images/OIP (4).webp" alt="Community Outreach">
                             <div class="slide-caption">
                                 <div class="slide-count">04 / 04</div>
                                 <h3 data-lang-en="Community Outreach & Evangelism" data-lang-fr="Action Communautaire & Évangélisation">Community Outreach & Evangelism</h3>
@@ -228,19 +239,19 @@
                 <!-- Thumbnail Strip -->
                 <div class="gallery-thumbs" id="gallery-thumbs">
                     <div class="thumb-item active" data-index="0">
-                        <img src="OIP.webp" alt="Ministry & Worship">
+                        <img src="images/OIP.webp" alt="Ministry & Worship">
                         <div class="thumb-overlay"></div>
                     </div>
                     <div class="thumb-item" data-index="1">
-                        <img src="download.webp" alt="Live Performance">
+                        <img src="images/download.webp" alt="Live Performance">
                         <div class="thumb-overlay"></div>
                     </div>
                     <div class="thumb-item" data-index="2">
-                        <img src="OIP (5).webp" alt="Music Creation">
+                        <img src="images/OIP (5).webp" alt="Music Creation">
                         <div class="thumb-overlay"></div>
                     </div>
                     <div class="thumb-item" data-index="3">
-                        <img src="OIP (4).webp" alt="Community Outreach">
+                        <img src="images/OIP (4).webp" alt="Community Outreach">
                         <div class="thumb-overlay"></div>
                     </div>
                 </div>
@@ -416,6 +427,65 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-title">
+      <h2 data-lang-en="Testimonials" data-lang-fr="Témoignages">Testimonials</h2>
+    </div>
+
+    <!-- Affichage des témoignages approuvés -->
+    <div class="testimonials-display" id="testimonials-display">
+      <div class="testimonials-loading" id="testimonials-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p data-lang-en="Loading testimonials..." data-lang-fr="Chargement des témoignages...">Loading testimonials...</p>
+      </div>
+      <div class="testimonials-empty" id="testimonials-empty" style="display:none;">
+        <i class="fas fa-heart"></i>
+        <p data-lang-en="Be the first to share your testimony!" data-lang-fr="Soyez le premier à partager votre témoignage !">Be the first to share your testimony!</p>
+      </div>
+      <div class="testimonials-grid" id="testimonials-grid" style="display:none;"></div>
+    </div>
+
+    <!-- Formulaire de soumission -->
+    <div class="testimonial-form-wrapper">
+      <h3 data-lang-en="Share Your Testimony" data-lang-fr="Partagez Votre Témoignage">Share Your Testimony</h3>
+      <p data-lang-en="Has Thenella's ministry touched your heart? Share your experience." data-lang-fr="Le ministère de Thenella a-t-il touché votre cœur ? Partagez votre expérience.">Has Thenella's ministry touched your heart? Share your experience.</p>
+
+      <form id="testimonial-form">
+        <div class="form-group">
+          <label data-lang-en="Full Name" data-lang-fr="Nom Complet">Full Name</label>
+          <input type="text" id="tm-public-name" required>
+        </div>
+        <div class="form-group">
+          <label data-lang-en="Role / Function" data-lang-fr="Rôle / Fonction">Role / Function</label>
+          <input type="text" id="tm-public-role" placeholder="Ex: Fidèle, Pasteur...">
+        </div>
+        <div class="form-group">
+          <label data-lang-en="Your Testimony" data-lang-fr="Votre Témoignage">Your Testimony</label>
+          <textarea id="tm-public-message" rows="5" required></textarea>
+        </div>
+        <div class="testimonial-submit-area">
+          <button type="submit" class="btn" id="tm-submit-btn">
+            <span data-lang-en="Submit Testimony" data-lang-fr="Soumettre le Témoignage">Submit Testimony</span>
+          </button>
+          <p class="testimonial-note" data-lang-en="Your testimony will be visible after validation by Thenella." data-lang-fr="Votre témoignage sera visible après validation par Thenella.">Your testimony will be visible after validation by Thenella.</p>
+        </div>
+      </form>
+
+      <!-- Message de succès -->
+      <div class="testimonial-success" id="testimonial-success" style="display:none;">
+        <i class="fas fa-check-circle"></i>
+        <h4 data-lang-en="Thank you! Your testimony has been received." data-lang-fr="Merci ! Votre témoignage a bien été reçu.">Thank you! Your testimony has been received.</h4>
+        <p data-lang-en="It will appear on the site after validation." data-lang-fr="Il apparaîtra sur le site après validation.">It will appear on the site after validation.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="container">
@@ -463,6 +533,8 @@
         </div>
     </section>
 
+    
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -485,6 +557,7 @@
                         <li><a href="#biography" data-lang-en="Biography" data-lang-fr="Biographie">Biography</a></li>
                         <li><a href="#music" data-lang-en="Music" data-lang-fr="Musique">Music</a></li>
                         <li><a href="#contact" data-lang-en="Contact" data-lang-fr="Contact">Contact</a></li>
+                        <li><a href="#testimonials" data-lang-en="Testimonials" data-lang-fr="Témoignages">Testimonials</a></li>
                     </ul>
                 </div>
                 
@@ -499,7 +572,7 @@
             </div>
             
             <div class="copyright">
-                <p data-lang-en="&copy; 2023 THENELLA Ministries. All rights reserved. | Designed with ❤️ for gospel music lovers" data-lang-fr="&copy; 2023 Ministères THENELLA. Tous droits réservés. | Conçu avec ❤️ pour les amateurs de musique gospel">&copy; 2023 THENELLA Ministries. All rights reserved. | Designed with ❤️ for gospel music lovers</p>
+                <p data-lang-en="&copy; 2026 THENELLA Ministries. All rights reserved. | Designed with ❤️ for gospel music lovers" data-lang-fr="&copy; 2026 Ministères THENELLA. Tous droits réservés. | Conçu avec ❤️ pour les amateurs de musique gospel">&copy; 202 THENELLA Ministries. All rights reserved. | Designed with ❤️ for gospel music lovers</p>
             </div>
         </div>
     </footer>
