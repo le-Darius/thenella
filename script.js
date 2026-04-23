@@ -1,4 +1,11 @@
-// DOM Elements
+// ── API URL ───────────────────────────────────────────────────
+const API_URL = 'https://backenddethenellawebdyn-production.up.railway.app/api';
+
+// ── Months (utilisés dans loadEvents) ────────────────────────
+const MONTHS_FR = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ── DOM Elements ──────────────────────────────────────────────
 const header = document.getElementById('header');
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
@@ -53,11 +60,9 @@ function updateGallery(index) {
     currentSlide = (index + totalSlides) % totalSlides;
     sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-    // Dots
     dots.forEach(d => d.classList.remove('active'));
     dots[currentSlide].classList.add('active');
 
-    // Thumbnails
     thumbItems.forEach(t => t.classList.remove('active'));
     thumbItems[currentSlide].classList.add('active');
 }
@@ -114,7 +119,6 @@ function closeLightbox() {
     document.body.style.overflow = '';
 }
 
-// Open lightbox on slide click
 slides.forEach((slide, i) => slide.addEventListener('click', () => openLightbox(i)));
 
 lightboxClose.addEventListener('click', closeLightbox);
@@ -131,7 +135,6 @@ lightboxPrev.addEventListener('click', () => {
     openLightbox(prev);
 });
 
-// Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
@@ -170,7 +173,7 @@ function switchLanguage(lang) {
 langEnBtn.addEventListener('click', () => switchLanguage('en'));
 langFrBtn.addEventListener('click', () => switchLanguage('fr'));
 
-// ── Form submission ───────────────────────────────────────────
+// ── Form submission (Booking) ─────────────────────────────────
 bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = bookingForm.querySelector('button[type="submit"]');
@@ -178,22 +181,22 @@ bookingForm.addEventListener('submit', async (e) => {
     btn.textContent = currentLang === 'en' ? 'Sending...' : 'Envoi...';
 
     try {
-        const res = await fetch('http://localhost:5000/api/booking', {
+        const res = await fetch(`${API_URL}/bookings`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
+                name     : document.getElementById('name').value,
+                email    : document.getElementById('email').value,
+                phone    : document.getElementById('phone').value,
                 eventType: document.getElementById('event-type').value,
-                message: document.getElementById('message').value
+                message  : document.getElementById('message').value
             })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
         alert(currentLang === 'en'
-            ? `Thank you! Your request has been sent. Check your email.`
-            : `Merci ! Votre demande a été envoyée. Vérifiez votre email.`);
+            ? 'Thank you! Your request has been sent. Check your email.'
+            : 'Merci ! Votre demande a été envoyée. Vérifiez votre email.');
         bookingForm.reset();
     } catch {
         alert(currentLang === 'en' ? 'Error sending. Try again.' : 'Erreur envoi. Réessayez.');
@@ -217,8 +220,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ── Events from API ───────────────────────────────────────────
-const API_URL = 'https://backenddethenellawebdyn-production.up.railway.app/api';
-
 async function loadEvents() {
     const grid    = document.getElementById('events-grid');
     const loading = document.getElementById('events-loading');
@@ -243,10 +244,10 @@ async function loadEvents() {
 
         grid.style.display = 'flex';
         grid.innerHTML = upcoming.map(e => {
-            const date = new Date(e.date);
-            const day  = date.getDate().toString().padStart(2,'0');
+            const date     = new Date(e.date);
+            const day      = date.getDate().toString().padStart(2,'0');
             const monthIdx = date.getMonth();
-            const year = date.getFullYear();
+            const year     = date.getFullYear();
             const monthLabel = currentLang === 'fr' ? MONTHS_FR[monthIdx] : MONTHS_EN[monthIdx];
 
             const typeLabel = e.category || e.type || '';
@@ -266,7 +267,7 @@ async function loadEvents() {
                     <h3>${e.title}</h3>
                     <div class="event-meta">
                         ${e.location ? `<span><i class="fas fa-map-marker-alt"></i> ${e.location}</span>` : ''}
-                        ${typeLabel ? `<span><i class="fas fa-tag"></i> ${typeLabel}</span>` : ''}
+                        ${typeLabel  ? `<span><i class="fas fa-tag"></i> ${typeLabel}</span>`              : ''}
                     </div>
                 </div>
                 ${badgeLabel ? `<span class="event-badge ${badgeClass}">${badgeLabel}</span>` : ''}
@@ -319,7 +320,7 @@ async function loadTestimonials() {
     }
 }
 
-// Soumission du formulaire témoignage
+// ── Testimonial form submission ───────────────────────────────
 const testimonialForm = document.getElementById('testimonial-form');
 if (testimonialForm) {
     testimonialForm.addEventListener('submit', async (e) => {
@@ -354,9 +355,9 @@ if (testimonialForm) {
 }
 
 // ── Dropdown "Plus" ───────────────────────────────────────────
-const navDropdown = document.getElementById('nav-dropdown');
+const navDropdown   = document.getElementById('nav-dropdown');
 const dropdownToggle = document.getElementById('dropdown-toggle');
-const dropdownMenu = document.getElementById('dropdown-menu');
+const dropdownMenu  = document.getElementById('dropdown-menu');
 
 if (dropdownToggle) {
     dropdownToggle.addEventListener('click', (e) => {
@@ -366,7 +367,6 @@ if (dropdownToggle) {
     });
 }
 
-// Fermer en cliquant ailleurs
 document.addEventListener('click', (e) => {
     if (navDropdown && !navDropdown.contains(e.target)) {
         navDropdown.classList.remove('open');
@@ -374,7 +374,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Fermer quand on clique sur un lien du dropdown
 if (dropdownMenu) {
     dropdownMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
@@ -391,5 +390,5 @@ document.addEventListener('DOMContentLoaded', () => {
     updateGallery(0);
     startAutoSlide();
     loadEvents();
-    loadTestimonials(); // ← ajouté pour charger les témoignages
+    loadTestimonials();
 });
