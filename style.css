@@ -205,7 +205,7 @@ header.scrolled {
 
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(44, 24, 16, 0.7), rgba(44, 24, 16, 0.7)), url('OIP-1.webp');
+    background: linear-gradient(rgba(44, 24, 16, 0.7), rgba(44, 24, 16, 0.7)), url('images/OIP-1.webp');
     background-size: cover;
     background-position: top center;
     display: flex;
